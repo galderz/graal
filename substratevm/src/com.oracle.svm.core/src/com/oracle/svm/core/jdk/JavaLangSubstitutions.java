@@ -387,88 +387,88 @@ final class Target_java_lang_System {
 }
 
 @TargetClass(java.lang.StrictMath.class)
-@CLibrary(value = "strictmath", requireStatic = true)
+@CLibrary(value = "openlibm", requireStatic = true)
 final class Target_java_lang_StrictMath {
     // Checkstyle: stop
 
     @Substitute
-    @CFunction(value = "StrictMath_sin", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "sin", transition = CFunction.Transition.NO_TRANSITION)
     private static native double sin(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_cos", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "cos", transition = CFunction.Transition.NO_TRANSITION)
     private static native double cos(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_tan", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "tan", transition = CFunction.Transition.NO_TRANSITION)
     private static native double tan(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_asin", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "asin", transition = CFunction.Transition.NO_TRANSITION)
     private static native double asin(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_acos", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "acos", transition = CFunction.Transition.NO_TRANSITION)
     private static native double acos(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_atan", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "atan", transition = CFunction.Transition.NO_TRANSITION)
     private static native double atan(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_exp", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "exp", transition = CFunction.Transition.NO_TRANSITION)
     private static native double exp(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_log", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "log", transition = CFunction.Transition.NO_TRANSITION)
     private static native double log(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_log10", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "log10", transition = CFunction.Transition.NO_TRANSITION)
     private static native double log10(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_sqrt", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "sqrt", transition = CFunction.Transition.NO_TRANSITION)
     private static native double sqrt(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_cbrt", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "cbrt", transition = CFunction.Transition.NO_TRANSITION)
     private static native double cbrt(double a);
 
     @Substitute
-    @CFunction(value = "StrictMath_IEEEremainder", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "remainder", transition = CFunction.Transition.NO_TRANSITION)
     private static native double IEEEremainder(double f1, double f2);
 
     @Substitute
-    @CFunction(value = "StrictMath_atan2", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "atan2", transition = CFunction.Transition.NO_TRANSITION)
     private static native double atan2(double y, double x);
 
     @Substitute
-    @CFunction(value = "StrictMath_pow", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "pow", transition = CFunction.Transition.NO_TRANSITION)
     private static native double pow(double a, double b);
 
     @Substitute
-    @CFunction(value = "StrictMath_sinh", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "sinh", transition = CFunction.Transition.NO_TRANSITION)
     private static native double sinh(double x);
 
     @Substitute
-    @CFunction(value = "StrictMath_cosh", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "cosh", transition = CFunction.Transition.NO_TRANSITION)
     private static native double cosh(double x);
 
     @Substitute
-    @CFunction(value = "StrictMath_tanh", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "tanh", transition = CFunction.Transition.NO_TRANSITION)
     private static native double tanh(double x);
 
     @Substitute
-    @CFunction(value = "StrictMath_hypot", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "hypot", transition = CFunction.Transition.NO_TRANSITION)
     private static native double hypot(double x, double y);
 
     @Substitute
-    @CFunction(value = "StrictMath_expm1", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "expm1", transition = CFunction.Transition.NO_TRANSITION)
     private static native double expm1(double x);
 
     @Substitute
-    @CFunction(value = "StrictMath_log1p", transition = CFunction.Transition.NO_TRANSITION)
+    @CFunction(value = "log1p", transition = CFunction.Transition.NO_TRANSITION)
     private static native double log1p(double x);
     // Checkstyle: resume
 }
