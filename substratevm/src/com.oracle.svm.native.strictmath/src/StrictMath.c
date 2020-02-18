@@ -23,7 +23,7 @@
  * questions.
  */
 
-#include "fdlibm.h"
+#include "openlibm_math.h"
 
 /*
  * This file contains all the native methods of java.lang.StrictMath. We use the same library as the
