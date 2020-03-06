@@ -25,16 +25,13 @@
 package com.oracle.svm.core.jdk;
 
 import java.io.Closeable;
+import java.io.ObjectStreamClass;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.oracle.svm.core.annotate.Alias;
-import com.oracle.svm.core.annotate.InjectAccessors;
-import com.oracle.svm.core.annotate.RecomputeFieldValue;
+import com.oracle.svm.core.annotate.*;
 import com.oracle.svm.core.annotate.RecomputeFieldValue.Kind;
-import com.oracle.svm.core.annotate.Substitute;
-import com.oracle.svm.core.annotate.TargetClass;
 import com.oracle.svm.core.util.VMError;
 
 @TargetClass(java.io.FileDescriptor.class)
@@ -155,6 +152,22 @@ final class Target_java_io_DeleteOnExitHook {
                 }
             }
         }
+    }
+}
+
+@TargetClass(java.io.ObjectStreamClass.class)
+@SuppressWarnings({"unused"})
+final class Target_java_io_ObjectStreamClass {
+
+    @Delete("Object serialization is currently not supported")
+    private static native ObjectStreamClass lookup(Class<?> cl, boolean all);
+
+    @Delete("Object serialization is currently not supported")
+    private Target_java_io_ObjectStreamClass(final Class<?> cl) {
+    }
+
+    @Delete("Object serialization is currently not supported")
+    private Target_java_io_ObjectStreamClass() {
     }
 }
 
