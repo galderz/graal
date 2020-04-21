@@ -54,6 +54,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import com.oracle.graal.pointsto.reports.CallTreeCypher;
 import org.graalvm.collections.EconomicSet;
 import org.graalvm.collections.Pair;
 import org.graalvm.compiler.api.replacements.Fold;
@@ -768,6 +769,7 @@ public class NativeImageGenerator {
                 if (AnalysisReportsOptions.PrintAnalysisCallTree.getValue(options)) {
                     String reportName = imageName.substring(imageName.lastIndexOf("/") + 1);
                     CallTreePrinter.print(bigbang, SubstrateOptions.Path.getValue(), reportName);
+                    CallTreeCypher.print(bigbang, SubstrateOptions.Path.getValue(), reportName);
                 }
 
                 if (AnalysisReportsOptions.PrintImageObjectTree.getValue(options)) {
