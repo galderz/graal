@@ -172,6 +172,15 @@ public class SourceManager {
                     "org.omg.",
                     "org.w3c.",
                     "org.xml",
+                    "org.graalvm.collections.",
+                    "org.graalvm.home.",
+                    "org.graalvm.nativeimage.",
+                    "org.graalvm.options.",
+                    "org.graalvm.polyglot.",
+                    "org.graalvm.word.",
+                    "com.oracle.truffe.api.",
+                    "com.oracle.truffe.object.",
+                    "com.oracle.truffe.polyglot.",
     };
     /**
      * A whitelist of packages prefixes used to pre-filter GraalVM class lookups.
