@@ -579,7 +579,7 @@ public abstract class ObjectScanner {
 
         public Object putAndAcquire(Object object) {
             if (object instanceof Method[]) {
-                return putAndAquire(MethodArray.from(object), this.methodArrayStore);
+                return putAndAquire(new MethodArray((Method[]) object), this.methodArrayStore);
             } else {
                 return putAndAquire(object, this.store);
             }
@@ -619,8 +619,11 @@ public abstract class ObjectScanner {
         }
 
         public void release(Object o) {
-            Map<?, AtomicInteger> map = o instanceof Method[] ? this.methodArrayStore : this.store;
-            release(o, map);
+            if (o instanceof Method[]) {
+                release(new MethodArray((Method[]) o), this.methodArrayStore);
+            } else {
+                release(o, this.store);
+            }
         }
 
         private void release(Object o, Map<?, AtomicInteger> map) {
@@ -645,10 +648,6 @@ public abstract class ObjectScanner {
 
         private MethodArray(Method[] array) {
             this.array = array;
-        }
-
-        static <T> MethodArray from(Object array) {
-            return new MethodArray((Method[]) array);
         }
 
         @Override
