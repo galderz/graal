@@ -24,14 +24,18 @@
  */
 package com.oracle.graal.pointsto;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -570,10 +574,18 @@ public abstract class ObjectScanner {
          * programs such as the JS interpreter are 90k objects. Hence we use 64k as a good start.
          */
         private final IdentityHashMap<Object, AtomicInteger> store = new IdentityHashMap<>(65536);
+        private final Map<Object, AtomicInteger> methodArrayStore = new HashMap<>(128);
         private int sequence = 0;
 
         public Object putAndAcquire(Object object) {
-            IdentityHashMap<Object, AtomicInteger> map = this.store;
+            if (object instanceof Method[]) {
+                return putAndAquire(MethodArray.from(object), this.methodArrayStore);
+            } else {
+                return putAndAquire(object, this.store);
+            }
+        }
+
+        private Object putAndAquire(Object object, Map<Object, AtomicInteger> map) {
             AtomicInteger i = map.get(object);
             int seq = this.sequence;
             int inflightSequence = seq - 1;
@@ -607,7 +619,11 @@ public abstract class ObjectScanner {
         }
 
         public void release(Object o) {
-            IdentityHashMap<Object, AtomicInteger> map = this.store;
+            Map<?, AtomicInteger> map = o instanceof Method[] ? this.methodArrayStore : this.store;
+            release(o, map);
+        }
+
+        private void release(Object o, Map<?, AtomicInteger> map) {
             AtomicInteger i = map.get(o);
             if (i == null) {
                 // We have missed a value likely someone else has updated the map at the same time.
@@ -621,6 +637,82 @@ public abstract class ObjectScanner {
 
         public void reset() {
             sequence += 2;
+        }
+    }
+
+    private static final class MethodArray {
+        private final Method[] array;
+
+        private MethodArray(Method[] array) {
+            this.array = array;
+        }
+
+        static <T> MethodArray from(Object array) {
+            return new MethodArray((Method[]) array);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            MethodArray that = (MethodArray) o;
+            return methodArrayEquals(this.array, that.array);
+        }
+
+        static boolean methodArrayEquals(Method[] a, Method[] a2) {
+            if (a.length == 0 && a2.length == 0) {
+                return true;
+            }
+
+            if (a.length == 0 || a2.length == 0) {
+                return false;
+            }
+
+            // Check if contains Object methods
+            if (containsNoObjectMethods(a) && containsNoObjectMethods(a2)) {
+                return Arrays.equals(a, a2);
+            }
+
+            for (int i = 0; i < a.length; i++) {
+                if (isNoObjectMethod(a[i]) && isNoObjectMethod(a2[i])) {
+                    if (!Objects.equals(a[i], a2[i])) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return methodArrayHashCode(array);
+        }
+
+        private int methodArrayHashCode(Method[] a) {
+            if (a.length == 0)
+                return 1;
+
+            if (containsNoObjectMethods(a)) {
+                return Arrays.hashCode(a);
+            }
+
+            int result = 1;
+            for (Method method : a) {
+                if (isNoObjectMethod(method)) {
+                    result = 31 * result + method.hashCode();
+                }
+            }
+
+            return result;
+        }
+
+        private static boolean isNoObjectMethod(Method method) {
+            return method.getDeclaringClass() != Object.class;
+        }
+
+        static boolean containsNoObjectMethods(Method[] array) {
+            return isNoObjectMethod(array[array.length - 1]);
         }
     }
 }
